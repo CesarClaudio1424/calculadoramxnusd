@@ -1,3 +1,12 @@
+    def connect_to_dropbox():
+    """Conecta a Dropbox usando el token."""
+    try:
+        token = st.secrets["DROPBOX_ACCESS_TOKEN"]
+    except (FileNotFoundError, KeyError):
+        token = "sl.u.AF9bp8sTRhKtGdYoRQWM2k1Kpep1ZpE1_ZtLSnT-c0LN4iltoQxito5ujKrmsxS4-xBTa5x_S1zZaFQFVaX2EB-k5QnI6Xz58bgjIEpPQwsSWaA4OJjHj5H5EPTmcFijisDARfNTaPeitpqllaBjrOV48SzrGjAt6VdnrBHebSY8cKFO0jBEwVSa2vdxWiA28TNBUNFFASSbD_nJ-y72EhutfM1MN5-MFDsnYwWtJJFN1qPh_3Au4DQQ8TlhC3CjO8ZAlzN07OPDHTulv8miOlVJd9w9frLqN9ZrZMMryMb1S3XjdG8QdlpR3MGpJNd2XcNS0ZUVfR4l6rWTzBTM_vIrcTtEYoe_uEfhJzEQoXK2ojikkpEp5BfqrlaaKiKaOSvvHLZtUwH2sE6uTyxCiv9DOP-k1QnBBqNiiStH-TvlBZ2xwGbq-dZmBxbiQGsMrLc_fJI_pkO4h-vGA97fmBseC9qKqsRnyDl6F9N9D6nyxi-wgXVhZdSOswwWnxvZFPETf_mJb3lU0bnugxt1TdeYsIqcTNSiZaB83dTIF1AelJxUMUkAGSZjnMTycnu2Z0LbiGJZ7szLuXvLTGnJF30cFXLb7YRjfpw_Yq63zjIQxg9hVj2eYM0C2De4ui0JY_iQydvlur0JvGw8tGAjbOFqpz4uUkpmnqsvhU6D4B_XJn0EMiZkEApBDDLqahjnGdhZTqOwbM-AuINeYUjm9nCShOfGSIikV9S8Me2cJriIarKGuzA3y3K7hYuVSilK82OfHD-1YKWdpQ3MnIS21c7VT7776IQVGr4bQhEtDogbQMEhAeveO_oEGz7PUVm1xtsyEaWnGTUCo2XaKAPjpzO792l4Th5MN2vELSSXFsbhtVggaxOQuqZo2Au7epiMLLzZtA_U4ep4SpmRy88MHb4Y55Gm3BgtKjd3YocQxEAeYKcRTvSdfc6zPvuZ54f2cwC4rKvoQoNT-ZemIqEAVkrKXl5Ofd78oDfuATFXu-uyCM3s1MPtEe_0RCIi2rolxO9BsMPaqgK25azsu1tK5a4o_JtVAnYh_GidlycBwCDbUjkY0Uz5m09OPbm_PJaotkRD-twYiu6Lgfw7QWXvOqUKnDADNnla6qRenLUPR7GN7hnbkRH3wxmXAdjhzlY754jJXjjC8WKcJxLBZUPPgJN1g_T_d6fqifzhRgpBeXrMkJhQXADEsD0OsZbGCtdqWct8hoU5_eSorD0M-qWdMArUbqX5G1sW3K7-n1wx79_3gh3mmZcIB1hmo9asKLSy7eX5xBUyL1BOfB0MDrazHowkUhqTD9Z3-hdnIYxya9tNBwKMcGbMg670lPosLuT7HoIFMBhGAhEwhPMkIYLXF14FXnBsqObKELPkMyGtAmwQYCemEsGxJH9RbxMyzXf36hgaGcmlcqrVQL8OG-CdHWcZsX0YnPs8t9_tf3AjWKJimLXm3QFI5Junh9JJLKtcTcu9u3XUSwMzIqyWs7NnzpTqjw0dBXL1oEruoPHHj3f8dg"
+    return dropbox.Dropbox(token)
+#-----------------------------------------------------------
+
 import streamlit as st
 import gspread
 from google.oauth2.service_account import Credentials
@@ -5,6 +14,7 @@ from datetime import datetime
 import pandas as pd
 import dropbox
 import os
+import pytz # <-- LIBRERÍA PARA ZONA HORARIA
 
 # --- Importar credenciales (solo para entorno local) ---
 try:
@@ -40,8 +50,8 @@ def connect_to_dropbox():
     try:
         token = st.secrets["DROPBOX_ACCESS_TOKEN"]
     except (FileNotFoundError, KeyError):
-        token = "sl.u.AF9ertVVuaX6mVIB-fYcUXFxN8TqnTL9qPp6vlwbTZ2iwi-lYvB3vufG4ZnJmF7UJKmg1cKmIi5GDpmBYts7bXC120L7BTprMWsK-EC2lACQ7qn-N-HEXIRu74Mcqk5Idb1Vc7Y0fGl9fhZTlcMuY10savO6T3vWLc2RpT9w0PoCmHKh0iWhVYA8NKvrqAWr-A_QaPDwrBxQR8u3DpRlWpEVBVzS63u8LCI0wqrZiTY9sonh9nDpi88_pijxpvKQAlman0t8pCX8Q-zUZFzhzQMeLege5fGN8_p8LwTR1hHtWQMVc4Z-TwtWhKIrdb9mPLrnAJZTTbl8PKj10dlEdJiNcM-Ji1HdCjMLVraa79v59q15lfED2NHiHj1dAln8hgu5GoDql8EtXaU4ne1ddp0DfwpdKxNM-ye2IkBx2fWvre0MxO8zxSENtvH1Dv0lNsDlLMJo3e7ubRkAvv4pJSjwZia_ksQgoDJRfGKKvz1QM7OgAHyu_gPXz1ZatB3go1mZFAkvCRcRhuQvHbVsz2xX_YdeyrBhKgpmfeqYGSpMtPTLkAqPeLISrtETA2lgsIbC6W1yRD1uTpz1mTGF_m7fkSjmq9KHBmMojGmSmpSqnyELDiMIsN4mZSIcr6hmAshBA-f9B6tWGE9WfsLgOaRDRfwQkg3dRsJezXUzGC7nqSPrfHCxHAQ102vVyDIxHCnjLxcmMtkgWtmXvVkl2ZBxAJecMNBQUUNE-5n5kn1sO0CKT4R4mtMkhPxD-nfBduCukFfwihrZ0ChREFer1ZgT4v_-IFCyekVQwcqyhgigW35YlJ-pSg7gYdpsOqxUQOaCDxbe_SUVS7ZbBzUaoGNcTnkcKq85kkCm3xkcoi1Htk9kP5fbDNsmIXeIKgxpTIOShF6FOl210py5Yu00Gh8wJnkoCcJuOtDtIp7dPRVA-8HsH-ga-OKbMuiSbnegTyujg7bTmpDYUL26Y7jyMxWITlt6t-6s6CJpHxhL00LKbgpyU6k8GQk4XpzRyHMKkmoZvI0p5np6cUnp6FfF6Mn7mOLEqgue04j65jaL9cVi0lg8lO7P72HdK9FVqVwr84qpuCaouPGT3BEr9zlADBqKAu4z5t53kv9rFh7BW1aDxNOQcRwj6ng0KLcpUV9PpxcPodgprSeA57alQTAFmkZ7RUhGrr7ILMeyKG9RJR2Hm_5bpNqmTq8m5gcvo9XaP2XpDc5GIX7irYAFcyFUpJqqji6mVN9k0W37Rt9fXMKnWAzhCJdYaBNR-eVTygYoqETCqU4MuASiMbEcvX_Sn-UbLgGYfLclIGmb8OnVNbFzi3szuKz1CmV5VEooGiaQ6B_7FNobR7BPQDd6lXivsTtGWHEH7ZNGiTYXLK4NEO5lSpswEMpd5sm0yM6m2sFZb1lVOXCUwnB3BKc72Ac7OoeHQng9i7SS2uGeszATI-bRbLKqQTwl9aYLg7jBdCZ4TxeZ-0qrVgHW-poKRZrXNKsnMSQ6FBOVDZJDQCE5Lr2xiQ"
-    return dropbox.Dropbox(token)
+        token = "sl.u.AF9UxBXmVo7iZoU2pYVrBxCSwOMdeD2Kf3Vzpdvf9Sv80nr8xXbEUtvwJfPuppa3x1VAal3ezUBktIf_Ig9aoAF-VDjVGwXcbQyX01n-CqAVumiFwN1E4i9LY0XX4RUaST8LF5kEj1An95_kHu6l3KNLy__PC7ILNa5Yl0-2maHo3iwy7XRDT4QoI7CvSr2mW7vz6XJc17KfA8L9n4fTgXjdKOkUyw7rSFCmDLWSd187Yu6l74Oqf2uckv--ov1lcNY9dfpNYC3-Ag7RezaHgH6PgiZhPgHVNcr3-0oL8T0KNm12g3G-gVDtudatTu78pUktdV_2KlMP4F4Y5fwLTLg6PISHgE4-FHpTe1A7kIxiM5rDHRt0WXwV9sOVNcrXYtTzvCBwiHTEJjS174u9g_1LaE_oa22M1RF5WEpXBi5Y3OlzNvlaOnMJwR9wUnyFi7Mzh8NGB__os1WprJD_NWoqVVwTDyZU_kOt4A8pJBpOLVf8qCjEt6fB8CWWJ0zFozKPn2v3bYuRdOcSMkxFIhb8llgjvkj-1nJgsO53ogW-pS_6yWT3fHshT59lb_GIfollSDgfdn1lLociEV8zG6i2fyLlRs9Bma-IH-qE-36jTKxVVNSLG-ik_6CznDbB9uE6HeaCwV5lPI8sEbU8jf-QKLomb1vMbHTa6mui2v5m1lUUncgblVrxNTJjHm_GyfJyt2ZWZ-X60hnaaUNTx8LlwkqUR6G2htPn7-XWVXzN3AoyoA_aGzVno2EX_vpWixLrGhti63YiEdveURKiz0sWKSDSAUlmNEiN6PYyuTAqBhbKITTBARz_75zxP93JkHCUuVECMcYvlq9WyoGlYWC1rxrjSG9HXCd3qeFF9BG2bktuzKsCvJq4gxMO-dnTXrsZ13rXm_su_QOZYSlj4QZgvHYDU1SQLhcOsnxN2_ZRCvI0JUTUQK4s8lG78_t95s12CJKOyQAkPa2CmYapSkClnryNBhQRNdcuuM5NC8TEg3hy6kpMY3l-DGC6tVoNK57mbASaCfEAd4UjfOskODb7Iih1pGLsLZAobeAjDWHwVUv2lVEnk2R8mm0M5S90gRTGX2DkXcPpebPinuSYUNtUpQHa2HGrrgmfpM3Bf-Xc304UadYpklyKuZZJFx6x7fXIFWaKzKA02vNwQhDk3Id3yiDEhvHFxNKyWyKYPIwOCB1BvCjZHZZn4nTjyo3mWdrG1-NbeuRM4kDoCN9aigPnUefCWv3krpZXJ5D2yESrxqLiQXxUSVaPbPBBL5hc-xYmt2qlOqkCZS_HzWUXW6i7h_8cnX_yDMZChCoufEz1pzkBmwDl89j2-_sdoTr8OUqcau7ETcC4Bok2qXIPqqKW8HQhFC1qbjQu37KGiFqueMeipMGYwYaQxXcDxIXysISqKZQQNVm03UW5idAc1WcB3p2x5Wvb_JxGjfYn4pXKbmH297rtr8VmYSMLD90-e_gbog_GXNDNMuOOp0VpLP3i9iy0LZ2nFenLVOrvEq6jkg"
+        return dropbox.Dropbox(token)
 
 @st.cache_data(ttl=60)
 def get_client_data(_gsheet_client, spreadsheet_id):
@@ -68,7 +78,8 @@ def get_client_data(_gsheet_client, spreadsheet_id):
 def upload_to_dropbox(dbx_client, file_object, client_name):
     """Sube un archivo a Dropbox y devuelve el link para compartir."""
     try:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        mexico_tz = pytz.timezone("America/Mexico_City")
+        timestamp = datetime.now(mexico_tz).strftime("%Y%m%d_%H%M%S")
         dropbox_path = f"/{client_name.replace(' ', '_')}/{timestamp}_{file_object.name}"
         
         dbx_client.files_upload(file_object.getvalue(), dropbox_path, mode=dropbox.files.WriteMode('overwrite'))
@@ -131,13 +142,13 @@ def get_next_folio_number(_gsheet_client, spreadsheet_id, sheet_tab_name):
         last_folio_date_str = f"{parts[0]}-{parts[1]}-{parts[2]}"
         last_folio_num = int(parts[3])
 
-        today_date_str = datetime.now().strftime("%y-%m-%d")
+        today_date_str = datetime.now(pytz.timezone("America/Mexico_City")).strftime("%y-%m-%d")
 
         if last_folio_date_str == today_date_str:
             return last_folio_num + 1
         else:
             return 1
-    except (ValueError, IndexError): # Captura errores si el folio no tiene el formato esperado
+    except (ValueError, IndexError):
         return 1
     except Exception:
         return 1
@@ -209,11 +220,13 @@ def create_ajuste_row(row_index):
 
 def main():
     st.set_page_config(page_title="Calculadora y Registro", page_icon="🏦", layout="wide")
-    st.markdown("""<style>
+    st.markdown("""
+    <style>
         [data-testid="stFileUploader"] section [data-testid="stFileUploaderDropzone"] {display: none;}
         [data-testid="stFileUploader"] section {padding: 0;border: none;}
         [data-testid="stFileUploader"] {padding-top: 28px;}
-    </style>""", unsafe_allow_html=True)
+    </style>
+    """, unsafe_allow_html=True)
     st.markdown("<h1 style='text-align: center;'>Calculadora y Registro de Operaciones 🏦</h1>", unsafe_allow_html=True)
     st.markdown("---")
     gsheet_client, SPREADSHEET_ID, SHEET_TAB_NAME = connect_to_google_sheets()
@@ -344,14 +357,17 @@ def main():
                     st.warning("No hay operaciones con montos mayores a cero para guardar.")
                 else:
                     progress_bar = st.progress(0, text="Iniciando guardado...")
+                    
+                    # --- LÓGICA DE FOLIO Y HORA DE MÉXICO ---
+                    mexico_tz = pytz.timezone("America/Mexico_City")
+                    now_mexico = datetime.now(mexico_tz)
+                    timestamp = now_mexico.strftime("%Y-%m-%d %H:%M:%S")
+                    today_prefix = now_mexico.strftime("%y-%m-%d")
+                    next_folio_num = get_next_folio_number(gsheet_client, SPREADSHEET_ID, SHEET_TAB_NAME)
+                    
                     data_to_save_batch = []
-                    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     total_ops = len(operations_to_process)
                     
-                    # OBTENER FOLIO INICIAL
-                    next_folio_num = get_next_folio_number(gsheet_client, SPREADSHEET_ID, SHEET_TAB_NAME)
-                    today_prefix = datetime.now().strftime("%y-%m-%d")
-
                     for i, op in enumerate(operations_to_process):
                         current_folio = f"{today_prefix}-{next_folio_num + i:04d}"
                         progress_text = f"Procesando operación {current_folio}..."
@@ -404,12 +420,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-    def connect_to_dropbox():
-    """Conecta a Dropbox usando el token."""
-    try:
-        token = st.secrets["DROPBOX_ACCESS_TOKEN"]
-    except (FileNotFoundError, KeyError):
-        token = "sl.u.AF9bp8sTRhKtGdYoRQWM2k1Kpep1ZpE1_ZtLSnT-c0LN4iltoQxito5ujKrmsxS4-xBTa5x_S1zZaFQFVaX2EB-k5QnI6Xz58bgjIEpPQwsSWaA4OJjHj5H5EPTmcFijisDARfNTaPeitpqllaBjrOV48SzrGjAt6VdnrBHebSY8cKFO0jBEwVSa2vdxWiA28TNBUNFFASSbD_nJ-y72EhutfM1MN5-MFDsnYwWtJJFN1qPh_3Au4DQQ8TlhC3CjO8ZAlzN07OPDHTulv8miOlVJd9w9frLqN9ZrZMMryMb1S3XjdG8QdlpR3MGpJNd2XcNS0ZUVfR4l6rWTzBTM_vIrcTtEYoe_uEfhJzEQoXK2ojikkpEp5BfqrlaaKiKaOSvvHLZtUwH2sE6uTyxCiv9DOP-k1QnBBqNiiStH-TvlBZ2xwGbq-dZmBxbiQGsMrLc_fJI_pkO4h-vGA97fmBseC9qKqsRnyDl6F9N9D6nyxi-wgXVhZdSOswwWnxvZFPETf_mJb3lU0bnugxt1TdeYsIqcTNSiZaB83dTIF1AelJxUMUkAGSZjnMTycnu2Z0LbiGJZ7szLuXvLTGnJF30cFXLb7YRjfpw_Yq63zjIQxg9hVj2eYM0C2De4ui0JY_iQydvlur0JvGw8tGAjbOFqpz4uUkpmnqsvhU6D4B_XJn0EMiZkEApBDDLqahjnGdhZTqOwbM-AuINeYUjm9nCShOfGSIikV9S8Me2cJriIarKGuzA3y3K7hYuVSilK82OfHD-1YKWdpQ3MnIS21c7VT7776IQVGr4bQhEtDogbQMEhAeveO_oEGz7PUVm1xtsyEaWnGTUCo2XaKAPjpzO792l4Th5MN2vELSSXFsbhtVggaxOQuqZo2Au7epiMLLzZtA_U4ep4SpmRy88MHb4Y55Gm3BgtKjd3YocQxEAeYKcRTvSdfc6zPvuZ54f2cwC4rKvoQoNT-ZemIqEAVkrKXl5Ofd78oDfuATFXu-uyCM3s1MPtEe_0RCIi2rolxO9BsMPaqgK25azsu1tK5a4o_JtVAnYh_GidlycBwCDbUjkY0Uz5m09OPbm_PJaotkRD-twYiu6Lgfw7QWXvOqUKnDADNnla6qRenLUPR7GN7hnbkRH3wxmXAdjhzlY754jJXjjC8WKcJxLBZUPPgJN1g_T_d6fqifzhRgpBeXrMkJhQXADEsD0OsZbGCtdqWct8hoU5_eSorD0M-qWdMArUbqX5G1sW3K7-n1wx79_3gh3mmZcIB1hmo9asKLSy7eX5xBUyL1BOfB0MDrazHowkUhqTD9Z3-hdnIYxya9tNBwKMcGbMg670lPosLuT7HoIFMBhGAhEwhPMkIYLXF14FXnBsqObKELPkMyGtAmwQYCemEsGxJH9RbxMyzXf36hgaGcmlcqrVQL8OG-CdHWcZsX0YnPs8t9_tf3AjWKJimLXm3QFI5Junh9JJLKtcTcu9u3XUSwMzIqyWs7NnzpTqjw0dBXL1oEruoPHHj3f8dg"
-    return dropbox.Dropbox(token)

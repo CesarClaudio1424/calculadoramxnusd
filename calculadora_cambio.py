@@ -5,7 +5,7 @@ from datetime import datetime
 import pandas as pd
 import dropbox
 import os
-import pytz # <-- LIBRERÍA PARA ZONA HORARIA
+import pytz
 
 # --- Importar credenciales (solo para entorno local) ---
 try:
@@ -41,8 +41,9 @@ def connect_to_dropbox():
     try:
         token = st.secrets["DROPBOX_ACCESS_TOKEN"]
     except (FileNotFoundError, KeyError):
-        token = "sl.u.AF9BfuX7p1jLJURf5gfvLcPH_URG3rh4iCBJ0yImfWrCFuVvB8CRu2hkFSoGmsROwRfzUF8oH8GGYPh1BrSeUnvOTZXDd8jJfym84FFdUAiT9CvjB9H7wt8JNpF_h7pMSj7kPE6SUwVqE8FWvhlq6kj2yxcaIpja4CTzzjXqPgVVr4ddBYpAZ_FvItluKOrHgXSATJOdtAh-tetekjDIoRJOudoOOsrTovx7r6BlKC31BW8lHujf06irKz--8NiG5j1RNCootcOMjjp_p1YjzytaXfWIW8sAKt4xfK3EuS3T9L9W3Sh9ofLKqd8alNgBWAjkMapH6BFY9PhzZHCoU8lfJWxEGnx3J5zJAuk90bhkv9g7X1fBKw3_Tn5QAmAgyf1bG3-sRdB36lGIqUAbfcChYuvi_KzzI0owFQCZws10gMR1zd6VA1QQCbMAAkykHMkOj9pZ1BSmUUkb-26Yd8GcAskEoW4GcZsMKNtvrSU2t_QzObkM_GC8gMP5sSWzEiJXNr6COi-Fkag6tRGRE0a45y4E43y_hvyAETelD73GvUIgr-NMWvxGSTgvEcsy4UFEQHnBte7990wlyLafYAE5Hpy_gtmX1xPI5_uGJshG-b-hoAooOdjy7XdK2DlF_TvYRM9pIdQdT2tJgdE9o9ws3sSWIzLaMi0uj4s2IvTZEK8vkUbgRA0strEGtaAE81Vepc7Y5LlTTpKzkVlEf_SKyjV2kDWfIZ4ol-E28pQiLc0tL6gU89IGoDuSqmcSlp6QZ5KB-8l4JLDoM-KCnuIvwJ8hh_QMsZPqBzXbfAALpQZg78YqL--UQF347TOP2Ul3e0Q2eKrJGjnKgUx0DNfEXybDuAb76pZPYE5sjUYLGcviKucyRn16JUbKhlQGaTFoX_O2LdGD2eyawFvJLqEeNo8LG6Es2i0TXA1RT5o9IF5RXxDRHMXQYfJo9hEKwwYHxNs3ki-574FRt5VmCR1U324_-zZ_Oh37wGudU1DSXdk4Qohrh7pYGzOVcHCP3BoRw7xF4RM4rnWCV-DEC5ToVGyFhpeN53LKsYXkT7EVZUDs85jYkmfCHtPQcOHK2HjU7PcLvq6mbiV_3qb-L71pio8apsyxbWXY_eLdQN3Xnn-UWGOYTAUZhhefA2qo6rHEl5WrO5-a_jpxiEy_vYmQqKdknAjQpBkD9zgWrQFqO_cpVSVTYsZFeHFlDEnNUFhuc_0FulZ1bPiomWTBxDQG-i9T7IjcnIngz_vWkN5eqXtxwX6t-dLgNvrkdKAb2SR9Xez9-ftgKXvUdMrw2ky5M8Elsda2wSBjxpt60oePVVlSUUESTiiCJ4F5KBBFif4I_hrKzo2cu27HwkFisPrIQ2fnE3SPdc8Nub1le6vcaiIP4QQjJZt3jZICCSwAm8kKOqReEuHRYnEg0M8s8C5ZVXLmgiIZZrPQAZhJdIl8gOre8QKgKNRJfxuNgfvJMfc1X7Xho6P6lUc08gJJBacEAD1iIPSxx1ZoT5HQ2juyAw"
-        return dropbox.Dropbox(token)
+        from config import DROPBOX_ACCESS_TOKEN
+        token = "sl.u.AF9YZrQQNBatqy8AuauhyX1qgoeXAFgUEswNIx2SNskzJHjSxPMBK1-gJmzLqEzNRrrda7qgcetvuv_XNw6-Gsn--ufdKgVaX1y5USzWK2d61xnX02GbzHS36P6WQ68wB_r3AFfiO-yFC1UGZk17WKeD-672Y9dadD4TJqI8-wKnHhmJ9WZ2Y-vgA3s98yCLPSmfJ0aFnQjBZ75EfgZVnLhc6qp227SeCpTyUNK-2B7aaZendrYiFtDaE4oqNHzhl2CR6U3KzxTmsgGIRS85_vWvjCHCSGBkxvUbwt7CuR6tFe3zpo_hxpmm_1KgWcsY_IuKu5UU2yWe5lpZ5KYn3Yef6y0slIFzqN7MsMXCFpa9SWYBD-i9cV8-2R6ai7fU_6CcqHRkYDxP8dvgmHLLZ0QQVCqfT2HSKXS-nrfg-ImdkudM2OZWcmEI1qC8arqxwld5tnTmOj2AO-jS-K53Oe4mIJP-tJX1_sTgLlJE9lQP4uL0Yb49tpb5iSydvaMkrHTU2gZSJHWCNOlxTvcTt1aagvzrESRekyjUZw7-KWToAh45bfwdxueMKD9MglqokPdIhda7aZKb5Ed53iF8_jIzRdS7LcK84nvhEN3Xcov0cLVN3w25oAy33voZIaX0iSOQ2t095dsJZKxKKiI-1fvGLG1WyaAkD1slAE70xNNSSPBs3a37Tr8htz4Xb6Fj5z8lJs6HwZ7JxHyRMlMGkboKq_k1_feSQ9TW1pGGUuQNdgFlNPTEpYB-FTTU7SKzwqnJhixXpUCHcaXlNad6lv9P6Br3Vo4MNkE02zOM97EnL-ARmdY2sr_eS4_d2QH5Nb7CV9UCyK00qBOMAu5iOvRIyD8X4Ao5iI53Q7TXmJ6XlTJOOF77o3Et16bcchdlOYFAY-nmWoOvhpJTabcGq0ufAf_Zm4kLyr8Cbxo1PKfm-NxrYIwd65hcCIXtk5LFHHw-4xrk-OmzF-YYoE-aB3UUGuv9YsJyLbtkMH67N996yW6_vTuKfgVcTqt_hLmiuYJdx0GsDsSSE0e3WxE25-GAC0_-gb-lHjqmJcp3m353Ozef5040gWp0Vp0OY_nBgr1pQPNS4BsL3-au4TqLBpkYSv47EvZWH4zUCRAvdn3tu-ssx_u4TFY2ARwtV79mz2s99AU5fdJeJ1ffrFwpICUDL5AF-Tbghi3QMiwBkLx29e78qOFPlbqmWlgcfwexflyGiAn6TBjpoM64HYaPlHULOH2oMX_ekvZr3KvBRTETGx_sVrT0vT13F7SYEbMOvWiflKGv3QkE7FQVXrtvBOheAYQRXINr8IYMat7T_o2iY17TkgYLTKPzRIu5OaZ_-885vx6f0V5XgPQ1--JHArQmx2ib1-F5zgFn4Xd1JmPFVghzZfLsTQHBhJwtgct2yizQUZLEe1YAHWSC319_T0kw8WWfWbDztrJRU8fHsBQ2Ti1BqNBS674evIJRa4u1Jx8NiK4a_REdt7F9dmR9tkRxfTFDAh1-Cs28ljcTETUBwg"
+    return dropbox.Dropbox(token)
 
 @st.cache_data(ttl=60)
 def get_client_data(_gsheet_client, spreadsheet_id):
@@ -143,6 +144,25 @@ def get_next_folio_number(_gsheet_client, spreadsheet_id, sheet_tab_name):
         return 1
     except Exception:
         return 1
+        
+# --- NUEVA FUNCIÓN PARA LEER TASAS ---
+@st.cache_data(ttl=300) # Cache de 5 minutos para las tasas
+def get_initial_rates(_gsheet_client, spreadsheet_id):
+    """Lee la hoja 'Tasas' y devuelve los valores iniciales."""
+    try:
+        spreadsheet = _gsheet_client.open_by_key(spreadsheet_id)
+        worksheet = spreadsheet.worksheet("Tasas")
+        # Asumimos que los valores están en la segunda fila (A2 y B2)
+        rates = worksheet.row_values(2)
+        tasa_compra = float(rates[0])
+        tasa_venta = float(rates[1])
+        return tasa_compra, tasa_venta
+    except gspread.exceptions.WorksheetNotFound:
+        st.warning("No se encontró la hoja 'Tasas'. Usando valores por defecto.")
+        return 18.55, 19.44
+    except Exception as e:
+        st.warning(f"No se pudieron cargar las tasas. Usando valores por defecto. Error: {e}")
+        return 18.55, 19.44
 
 # --- FUNCIONES DE LA INTERFAZ ---
 
@@ -168,7 +188,7 @@ def create_calculation_row(row_index, precio_compra, precio_venta, mode_vende, m
                 resultado_vende = pesos_a_pagar
             st.markdown(f"""<div style="display: flex; align-items: center; justify-content: start; height: {div_height}px;"><p style='font-size: 28px; font-weight: bold; color: #228B22; margin: 0;'>{resultado_vende:,.2f} {resultado_suffix_vende}</p></div>""", unsafe_allow_html=True)
         with col_uploader:
-            st.file_uploader("Comprobante", type=["png", "jpg", "jpeg"], key=f"uploader_vende_{row_index}", label_visibility="collapsed")
+            st.file_uploader("Comprobante", type=["png", "jpg", "jpeg"], key=f"uploader_vende_{row_index}_{st.session_state.upload_key_iter}", label_visibility="collapsed")
     with col_compra:
         label_compra = "Monto en USDT a Entregar" if mode_compra == "USDT -> Pesos" else "Monto en Pesos a Cobrar"
         resultado_suffix_compra = "MXN" if mode_compra == "USDT -> Pesos" else "USDT"
@@ -185,7 +205,7 @@ def create_calculation_row(row_index, precio_compra, precio_venta, mode_vende, m
                 resultado_compra = pesos_a_cobrar
             st.markdown(f"""<div style="display: flex; align-items: center; justify-content: start; height: {div_height}px;"><p style='font-size: 28px; font-weight: bold; color: #DC143C; margin: 0;'>{resultado_compra:,.2f} {resultado_suffix_compra}</p></div>""", unsafe_allow_html=True)
         with col_uploader:
-            st.file_uploader("Comprobante", type=["png", "jpg", "jpeg"], key=f"uploader_compra_{row_index}", label_visibility="collapsed")
+            st.file_uploader("Comprobante", type=["png", "jpg", "jpeg"], key=f"uploader_compra_{row_index}_{st.session_state.upload_key_iter}", label_visibility="collapsed")
     return {"pesos_pagar": pesos_a_pagar, "usdt_recibir": usdt_a_recibir, "pesos_cobrar": pesos_a_cobrar, "usdt_entregar": usdt_a_entregar}
 
 def create_ajuste_row(row_index):
@@ -199,14 +219,14 @@ def create_ajuste_row(row_index):
             pago_monto = st.number_input("Monto del Pago", min_value=0.0, format="%.2f", key=f"pago_monto_{row_index}", label_visibility="collapsed")
             pago_moneda = st.radio("Moneda del Pago", ["MXN", "USDT"], key=f"pago_moneda_{row_index}", horizontal=True, index=1)
         with col_uploader:
-            st.file_uploader("Comprobante", type=["png", "jpg", "jpeg"], key=f"uploader_pago_{row_index}", label_visibility="collapsed")
+            st.file_uploader("Comprobante", type=["png", "jpg", "jpeg"], key=f"uploader_pago_{row_index}_{st.session_state.upload_key_iter}", label_visibility="collapsed")
     with col_recibo:
         col_monto, col_uploader = st.columns([1, 0.4])
         with col_monto:
             recibo_monto = st.number_input("Monto del Recibo", min_value=0.0, format="%.2f", key=f"recibo_monto_{row_index}", label_visibility="collapsed")
             recibo_moneda = st.radio("Moneda del Recibo", ["MXN", "USDT"], key=f"recibo_moneda_{row_index}", horizontal=True, index=1)
         with col_uploader:
-            st.file_uploader("Comprobante", type=["png", "jpg", "jpeg"], key=f"uploader_recibo_{row_index}", label_visibility="collapsed")
+            st.file_uploader("Comprobante", type=["png", "jpg", "jpeg"], key=f"uploader_recibo_{row_index}_{st.session_state.upload_key_iter}", label_visibility="collapsed")
     return {"pago_monto": pago_monto, "pago_moneda": pago_moneda, "recibo_monto": recibo_monto, "recibo_moneda": recibo_moneda}
 
 def main():
@@ -223,24 +243,33 @@ def main():
     gsheet_client, SPREADSHEET_ID, SHEET_TAB_NAME = connect_to_google_sheets()
     dbx_client = connect_to_dropbox()
 
+    # Cargar tasas iniciales
+    initial_tasa_compra, initial_tasa_venta = get_initial_rates(gsheet_client, SPREADSHEET_ID)
+
+    if 'num_rows' not in st.session_state: st.session_state.num_rows = 1
+    if 'num_ajustes' not in st.session_state: st.session_state.num_ajustes = 1
+    if 'upload_key_iter' not in st.session_state: st.session_state.upload_key_iter = 0
+
     def add_calculo_row():
-        if st.session_state.num_rows < 15: st.session_state.num_rows += 1
+        st.session_state.num_rows += 1
     def add_ajuste_row():
         st.session_state.num_ajustes += 1
     def limpiar_calculos_callback():
-        for i in range(st.session_state.num_rows):
-            if f"input_vende_{i}" in st.session_state: st.session_state[f"input_vende_{i}"] = 0.0
-            if f"input_compra_{i}" in st.session_state: st.session_state[f"input_compra_{i}"] = 0.0
-            if f"uploader_vende_{i}" in st.session_state: del st.session_state[f"uploader_vende_{i}"]
-            if f"uploader_compra_{i}" in st.session_state: del st.session_state[f"uploader_compra_{i}"]
+        for i in range(st.session_state.get('num_rows', 1)):
+            if f"input_compra_{i}" in st.session_state:
+                st.session_state[f"input_compra_{i}"] = 0.0
+            if f"input_venta_{i}" in st.session_state:
+                st.session_state[f"input_venta_{i}"] = 0.0
         st.session_state.num_rows = 1
+        st.session_state.upload_key_iter += 1
     def limpiar_ajustes_callback():
-        for i in range(st.session_state.num_ajustes):
-            if f"pago_monto_{i}" in st.session_state: st.session_state[f"pago_monto_{i}"] = 0.0
-            if f"recibo_monto_{i}" in st.session_state: st.session_state[f"recibo_monto_{i}"] = 0.0
-            if f"uploader_pago_{i}" in st.session_state: del st.session_state[f"uploader_pago_{i}"]
-            if f"uploader_recibo_{i}" in st.session_state: del st.session_state[f"uploader_recibo_{i}"]
+        for i in range(st.session_state.get('num_ajustes', 1)):
+            if f"pago_monto_{i}" in st.session_state:
+                st.session_state[f"pago_monto_{i}"] = 0.0
+            if f"recibo_monto_{i}" in st.session_state:
+                st.session_state[f"recibo_monto_{i}"] = 0.0
         st.session_state.num_ajustes = 1
+        st.session_state.upload_key_iter += 1
     def limpiar_todo_callback():
         limpiar_calculos_callback()
         limpiar_ajustes_callback()
@@ -267,16 +296,15 @@ def main():
             st.warning("No se pudieron cargar los clientes.")
     with col_compra:
         st.subheader("Configuración de Compra")
-        precio_compra_casa = st.number_input("Tasa de Compra", value=18.55, format="%.4f", key="precio_compra_input")
+        precio_compra_casa = st.number_input("Tasa de Compra", value=initial_tasa_compra, format="%.4f", key="precio_compra_input")
         mode_vende = st.radio("Modo para 'Cliente Vende / Yo Compro'", ("Pesos -> USDT", "USDT -> Pesos"), horizontal=True, key="mode_vende")
     with col_venta:
         st.subheader("Configuración de Venta")
-        precio_venta_casa = st.number_input("Tasa de Venta", value=19.44, format="%.4f", key="precio_venta_input")
+        precio_venta_casa = st.number_input("Tasa de Venta", value=initial_tasa_venta, format="%.4f", key="precio_venta_input")
         mode_compra = st.radio("Modo para 'Cliente Compra / Yo Vendo'", ("Pesos -> USDT", "USDT -> Pesos"), horizontal=True, key="mode_compra")
     st.markdown("---")
 
     st.header("2. Operaciones de Compra/Venta")
-    if 'num_rows' not in st.session_state: st.session_state.num_rows = 1
     col1, col2, _ = st.columns([1.3, 1.3, 5])
     with col1: st.button("➕ Añadir Cálculo", on_click=add_calculo_row, use_container_width=True)
     with col2: st.button("🔄 Limpiar Cálculos", use_container_width=True, on_click=limpiar_calculos_callback)
@@ -285,7 +313,6 @@ def main():
     st.markdown("---")
 
     st.header("3. Pagos y Recibos (Ajustes de Caja)")
-    if 'num_ajustes' not in st.session_state: st.session_state.num_ajustes = 1
     all_ajustes_data = [create_ajuste_row(i) for i in range(st.session_state.num_ajustes)]
     col_ajuste1, col_ajuste2, _ = st.columns([1.3, 1.3, 5])
     with col_ajuste1: st.button("➕ Añadir Ajuste", on_click=add_ajuste_row, use_container_width=True)
@@ -313,7 +340,7 @@ def main():
         
     st.subheader("Balance Final de Cierre ⚖️")
     balance_final_usdt = (recibir_usdt_sum + balance_inicial_usdt + ajuste_neto_usdt) - entregar_usdt_sum
-    balance_final_pesos = 0 #(cobrar_pesos_sum + balance_inicial_pesos + ajuste_neto_pesos) - pagar_pesos_sum
+    balance_final_pesos = (cobrar_pesos_sum + balance_inicial_pesos + ajuste_neto_pesos) - pagar_pesos_sum
     if balance_final_usdt > 0:
         status_texto = "TE DEBEN PAGAR (Utilidad en USDT)"
         status_color = "#228B22"
@@ -348,41 +375,38 @@ def main():
                     st.warning("No hay operaciones con montos mayores a cero para guardar.")
                 else:
                     progress_bar = st.progress(0, text="Iniciando guardado...")
-                    
-                    # --- LÓGICA DE FOLIO Y HORA DE MÉXICO ---
+                    data_to_save_batch = []
                     mexico_tz = pytz.timezone("America/Mexico_City")
                     now_mexico = datetime.now(mexico_tz)
                     timestamp = now_mexico.strftime("%Y-%m-%d %H:%M:%S")
                     today_prefix = now_mexico.strftime("%y-%m-%d")
                     next_folio_num = get_next_folio_number(gsheet_client, SPREADSHEET_ID, SHEET_TAB_NAME)
-                    
-                    data_to_save_batch = []
                     total_ops = len(operations_to_process)
                     
                     for i, op in enumerate(operations_to_process):
                         current_folio = f"{today_prefix}-{next_folio_num + i:04d}"
                         progress_text = f"Procesando operación {current_folio}..."
-                        progress_bar.progress((i) / (total_ops + 2), text=progress_text)
+                        progress_bar.progress((i + 1) / (total_ops + 2), text=progress_text)
                         link = ""
                         if op['type'] == 'Compra':
-                            uploader_key = f"uploader_vende_{op['index']}"
+                            uploader_key = f"uploader_vende_{op['index']}_{st.session_state.upload_key_iter}"
                             if uploader_key in st.session_state and st.session_state[uploader_key]:
                                 link = upload_to_dropbox(dbx_client, st.session_state[uploader_key], selected_client_name)
                             data_to_save_batch.append([current_folio, timestamp, selected_client_name, "Compra", op['data']["pesos_pagar"], op['data']["usdt_recibir"], precio_compra_casa, link])
                         elif op['type'] == 'Venta':
-                            uploader_key = f"uploader_compra_{op['index']}"
+                            uploader_key = f"uploader_compra_{op['index']}_{st.session_state.upload_key_iter}"
                             if uploader_key in st.session_state and st.session_state[uploader_key]:
                                 link = upload_to_dropbox(dbx_client, st.session_state[uploader_key], selected_client_name)
                             data_to_save_batch.append([current_folio, timestamp, selected_client_name, "Venta", op['data']["pesos_cobrar"], op['data']["usdt_entregar"], precio_venta_casa, link])
                         elif op['type'] == 'Pago':
-                            uploader_key = f"uploader_pago_{op['index']}"
+                            uploader_key = f"uploader_pago_{op['index']}_{st.session_state.upload_key_iter}"
                             if uploader_key in st.session_state and st.session_state[uploader_key]:
                                link = upload_to_dropbox(dbx_client, st.session_state[uploader_key], selected_client_name)
                             pesos = op['data']['pago_monto'] if op['data']['pago_moneda'] == 'MXN' else ""
                             usdt = op['data']['pago_monto'] if op['data']['pago_moneda'] == 'USDT' else ""
                             data_to_save_batch.append([current_folio, timestamp, selected_client_name, "Pago", pesos, usdt, "N/A", link])
                         elif op['type'] == 'Recibo':
-                            uploader_key = f"uploader_recibo_{op['index']}"
+                            uploader_key = f"uploader_recibo_{op['index']}_{st.session_state.upload_key_iter}"
                             if uploader_key in st.session_state and st.session_state[uploader_key]:
                                 link = upload_to_dropbox(dbx_client, st.session_state[uploader_key], selected_client_name)
                             pesos = op['data']['recibo_monto'] if op['data']['recibo_moneda'] == 'MXN' else ""

@@ -41,8 +41,8 @@ def connect_to_dropbox():
     try:
         token = st.secrets["DROPBOX_ACCESS_TOKEN"]
     except (FileNotFoundError, KeyError):
-        token = "sl.u.AF9YZrQQNBatqy8AuauhyX1qgoeXAFgUEswNIx2SNskzJHjSxPMBK1-gJmzLqEzNRrrda7qgcetvuv_XNw6-Gsn--ufdKgVaX1y5USzWK2d61xnX02GbzHS36P6WQ68wB_r3AFfiO-yFC1UGZk17WKeD-672Y9dadD4TJqI8-wKnHhmJ9WZ2Y-vgA3s98yCLPSmfJ0aFnQjBZ75EfgZVnLhc6qp227SeCpTyUNK-2B7aaZendrYiFtDaE4oqNHzhl2CR6U3KzxTmsgGIRS85_vWvjCHCSGBkxvUbwt7CuR6tFe3zpo_hxpmm_1KgWcsY_IuKu5UU2yWe5lpZ5KYn3Yef6y0slIFzqN7MsMXCFpa9SWYBD-i9cV8-2R6ai7fU_6CcqHRkYDxP8dvgmHLLZ0QQVCqfT2HSKXS-nrfg-ImdkudM2OZWcmEI1qC8arqxwld5tnTmOj2AO-jS-K53Oe4mIJP-tJX1_sTgLlJE9lQP4uL0Yb49tpb5iSydvaMkrHTU2gZSJHWCNOlxTvcTt1aagvzrESRekyjUZw7-KWToAh45bfwdxueMKD9MglqokPdIhda7aZKb5Ed53iF8_jIzRdS7LcK84nvhEN3Xcov0cLVN3w25oAy33voZIaX0iSOQ2t095dsJZKxKKiI-1fvGLG1WyaAkD1slAE70xNNSSPBs3a37Tr8htz4Xb6Fj5z8lJs6HwZ7JxHyRMlMGkboKq_k1_feSQ9TW1pGGUuQNdgFlNPTEpYB-FTTU7SKzwqnJhixXpUCHcaXlNad6lv9P6Br3Vo4MNkE02zOM97EnL-ARmdY2sr_eS4_d2QH5Nb7CV9UCyK00qBOMAu5iOvRIyD8X4Ao5iI53Q7TXmJ6XlTJOOF77o3Et16bcchdlOYFAY-nmWoOvhpJTabcGq0ufAf_Zm4kLyr8Cbxo1PKfm-NxrYIwd65hcCIXtk5LFHHw-4xrk-OmzF-YYoE-aB3UUGuv9YsJyLbtkMH67N996yW6_vTuKfgVcTqt_hLmiuYJdx0GsDsSSE0e3WxE25-GAC0_-gb-lHjqmJcp3m353Ozef5040gWp0Vp0OY_nBgr1pQPNS4BsL3-au4TqLBpkYSv47EvZWH4zUCRAvdn3tu-ssx_u4TFY2ARwtV79mz2s99AU5fdJeJ1ffrFwpICUDL5AF-Tbghi3QMiwBkLx29e78qOFPlbqmWlgcfwexflyGiAn6TBjpoM64HYaPlHULOH2oMX_ekvZr3KvBRTETGx_sVrT0vT13F7SYEbMOvWiflKGv3QkE7FQVXrtvBOheAYQRXINr8IYMat7T_o2iY17TkgYLTKPzRIu5OaZ_-885vx6f0V5XgPQ1--JHArQmx2ib1-F5zgFn4Xd1JmPFVghzZfLsTQHBhJwtgct2yizQUZLEe1YAHWSC319_T0kw8WWfWbDztrJRU8fHsBQ2Ti1BqNBS674evIJRa4u1Jx8NiK4a_REdt7F9dmR9tkRxfTFDAh1-Cs28ljcTETUBwg"
-    return dropbox.Dropbox(token)
+        token = "sl.u.AGDf5fvjZMfBSnD3lO6_m3XNfvfeH_nkjYxG9RJ7aRoFJUPskwMZONLAZEkVmOwUVzDyQF_rRA_2XAu4ASnY4DtTvMFXifWb9krSqO8rDG5OhWuHsTvhVs_A28B0-NMY1Uu8DDhXTUHnb_2dhQH1YRoLlmW37-QW4B3wqnlqNZdaRAZbEuP8lr2pdgO_OIqyUq28wA0Ap7uh8_6dUxBW7w5TYdlb2GiLdJGYlGRx__VR8x9eYbvvYEQ_UiRK3B5PLCN0XEgKdpLMu5Md-Z9mmW8JFD0qQqkfNg6Vp5EhJjFeWP2LPgDQ3DPrQ7ZDcGus9gtlQ8Nkr5eMCT6WTg3_Zp4wUh6z0jo_p2K8hADhZL9R4TzzhWLL2LUQhNlNBUid7twtkN5hX89Ne_es2Oko7DO0kZ8HA1Y2UeNICJ9T43Ye80vFC1U1MBVngTcogu02e1rxlbB0aAo2bJTkmNQe38EcP6nqAurffaoDMnUoIJ-_J0pXAd-y97D8RC98lXMQm6u_nfWWbRSsTNybDeo2O5YaMoO2JpEfY-Liq9hfQ2ZmZerLZvOfIQjoacvfvx9wVQ2J9eOODeIm95daEPieLJyC6NmcZKKDyO_K024YK7KK1frZXOKfL20o1Ngk3RTsKeIPbeoJDId3HxU76MOw9CFRiB6pAWlyn_DBMUeOZMwdgoh4Iw1ooKCN3v9UptYzO5PTXHSfFRgImpxLPMmK1KVb89GcVvt-_aXZDUTgoYAhogYcpJYUuDHwtqnC3lFvHNASrtU0oWw_4rW0PqVf2sFNv_8La9lCwBvm2VLPupK0H2Barud4aw8kejVksWQiGyvUzZCGZSqfRPHW0x2cT9TJYOoOfoyQwqoUnqv4FWxSI4QSUijb3sfiK0FmsvUEKDyZ4KvEkC-9fkwUy52qK1gg7Xm15YdaWW6rRzqkDTPorcAfhu5AWHJO73Xz7L4Am3FjEhoCbriiTmlViJgFhn7-Lsl1-WDRoKjTzMLtgtLscf1lHNT5iTqA79GgrBXlXlIA0_KbKsFt8zdsOK-uJRUG12WoJwiRubNvP5aVjpGRHxGb2rizCbwGNwzaeEkDXf8wrpiurTCvQYC-en3x-hgVQGMmZxiHhfmHa8-w85it-P7ed9uxErGn1SM9sF0ULYEg2lhpjL1hV7iZYS88OSf-8CSE-yovWVuBJ8hyqTRHwg-mwlTspUtiVDWAr1OWOo5kxSkrWA4p8nnwCtfhss8omPtapIYXHjRvRQBrQMJvB9TaHRbXUd5eB0mbtvr-3TfDZbicicpmlEeWrbNynUNgpsg4eZXNc_OqeTb4UnQG5J_GF9kfmbyrhSrvYaxcfQpBelTmRQUcnS6DqYuP2HviIGiz3hIqWP3oIIQhrnerP6GxOdb7_6kBvhHp4KvPTey6i43AtZQplkPua3QSxRsEoFrKJUYKJK0cx0GEIykiZBrUkb4Pds-6FhHzy7FC7ofckn4m00ulqH32VcWmyjF1"
+        return dropbox.Dropbox(token)
 
 @st.cache_data(ttl=60)
 def get_client_data(_gsheet_client, spreadsheet_id):
@@ -256,9 +256,9 @@ def main():
     def limpiar_calculos_callback():
         for i in range(st.session_state.get('num_rows', 1)):
             if f"input_compra_{i}" in st.session_state:
-                st.session_state[f"input_compra_{i}"] = 10.0
-            if f"input_venta_{i}" in st.session_state:
-                st.session_state[f"input_venta_{i}"] = 10.0
+                st.session_state[f"input_compra_{i}"] = 0.0
+            if f"input_vende_{i}" in st.session_state:
+                st.session_state[f"input_vende_{i}"] = 0.0
         st.session_state.num_rows = 1
         st.session_state.upload_key_iter += 1
     def limpiar_ajustes_callback():

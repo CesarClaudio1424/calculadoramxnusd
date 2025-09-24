@@ -297,11 +297,11 @@ def main():
             st.warning("No se pudieron cargar los clientes.")
     with col_compra:
         st.subheader("Configuración de Compra")
-        precio_compra_casa = st.number_input("Tasa de Compra", value=initial_tasa_compra, format="%.4f", key="precio_compra_input")
+        precio_compra_casa = st.number_input("Tasa de Compra", value=initial_tasa_compra, format="%.2f", key="precio_compra_input", step = 0.01)
         mode_vende = st.radio("Modo para 'Cliente Vende / Yo Compro'", ("Pesos -> USDT", "USDT -> Pesos"), horizontal=True, key="mode_vende")
     with col_venta:
         st.subheader("Configuración de Venta")
-        precio_venta_casa = st.number_input("Tasa de Venta", value=initial_tasa_venta, format="%.4f", key="precio_venta_input")
+        precio_venta_casa = st.number_input("Tasa de Venta", value=initial_tasa_venta, format="%.2f", key="precio_venta_input", step = 0.01)
         mode_compra = st.radio("Modo para 'Cliente Compra / Yo Vendo'", ("Pesos -> USDT", "USDT -> Pesos"), horizontal=True, key="mode_compra")
     st.markdown("---")
 

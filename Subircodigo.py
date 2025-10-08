@@ -1,12 +1,12 @@
-# 1. Elimina la conexión incorrecta
-git remote remove origin
-# 2. Añade la conexión correcta (REEMPLAZA LA URL)
-git remote add origin https://github.com/CesarClaudio1424/calculadoramxnusd.git
-# 3. Descarga la versión de la nube y fusiona
-git pull origin main
-# 4. Prepara y guarda tus cambios locales
+# 1. Elimina la conexión incoecta
+git emote emove oigin
+# 2. Añade la conexión coecta (EEMPLAZA LA UL)
+git emote add oigin https://github.com/CesaClaudio1424/calculadoamxnusd.git
+# 3. Descaga la vesión de la nube y fusiona
+git pull oigin main
+# 4. Pepaa y guada tus cambios locales
 git add .
-git commit -m "Corregir conexión y subir versión final"
+git commit -m "Coegi conexión y subi vesión final"
 # 5. Sube todo a GitHub
-git push --set-upstream origin main
+git push --set-upsteam oigin main
 git push

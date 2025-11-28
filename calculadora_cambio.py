@@ -11,7 +11,6 @@ import pytz
 try:
     from config import GOOGLE_CREDS, SPREADSHEET_ID, SHEET_TAB_NAME, DROPBOX_ACCESS_TOKEN
 except ImportError:
-    # No hacer nada si no existe, se asumirá que estamos en la nube
     pass
 
 # --- FUNCIONES DE CONEXIÓN Y DATOS ---
@@ -19,10 +18,7 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapi
 
 @st.cache_resource
 def connect_to_google_sheets():
-    """
-    Conecta a Google Sheets. Usa los secretos de Streamlit si está desplegado,
-    de lo contrario, usa el archivo config.py local.
-    """
+    """Conecta a Google Sheets."""
     try:
         creds_dict = st.secrets["google_creds"]
         spreadsheet_id = st.secrets["SPREADSHEET_ID"]
@@ -36,13 +32,31 @@ def connect_to_google_sheets():
     return client, spreadsheet_id, sheet_tab_name
 
 @st.cache_resource
-def connect_to_dropbox():
-    """Conecta a Dropbox usando el token."""
-    try:
-        token = st.secrets["DROPBOX_ACCESS_TOKEN"]
-    except (FileNotFoundError, KeyError):
-        token = "sl.u.AGI1HDQJGjD_g1It9TePyA75aHPHBaEH9ZsWYH14TRzUJO7o8K0n5fCGS66Wwa1BQZ2-ZHD1_fmIRMvbLNjLdALa35p7ZRZk6ga7rftCV325nudWRcyWy1P5Jds8apKinbi7hYDaU5LGLSp2BW_cKdqF1bOxLMU_VDDYgrlgZ6GhrYbUtVDW4lD_T7g1xOfrAy3NrySP0BEPNcCfGUdrfOysajRWfElJ4i3StOTXFtPCsLt4-z1xA95rT4_Y4sBPi16RoMUJWDq5qvFoEPt8C0aVfSQ6gJGI9K6W54yKGsDEXbv6X_Re8Tm48jBYu8ZOHmANV2uz60zOET1IkoouGsIKNps16djhV2cJRUOqQE07IO79MXbd4uucDkpeN3VGfgveQkw5P4uR9RCCpp0WWL35F-wATgXSpve4EFek6PPFri1JoWwvC0EMd0HX4MqFQOottgfTCUHhvWsBkuX3ncnPz6E-fKI9Bztehnl213MzgMU7-4QteKmrpGMFG2xSqTARNYYoxkJA_FKogqdpdNktdglYLrykIAn3j-KdWK5t850HsM0TqceH7mRdxy0MMqCikAbkLJAHPJ_bCKSzVeNx5WIdNFb81bhgBW0o1fxlGuX1lMaSTtSPNGH2oCfNITWMuq6-OiHL-HlvrGYxvqfA46h7E8ZE3PZavV9x36VZ4SILLcXHMEiCDxmdVsDR4anZ9CGEDXE-wzfuVyUW9uzkwFY8W6sWepgov77voH-c2Pdf4_HbTzwyq4eknQIemmvf3bEJgqkAa-iBLvC019R7AzJh0vxTXy-NAoCkfP0dtT2pUl1V0cMVjdkmyKfyb7ZIUk6J-vJeOq5jYC8ZsSn7MbvqwooAkAdrGZ5IarfwdEFDBRAd_XQIYvYRRY89JlF-j9_inLvst4FYrmD57i83fGBehGRYv_1lZmsL2s5kwgJdXuWRanRhF99gQTLhFHUeyPhg4GI9p7l0chuHGpTXug-VZRHTOEUX4eoeePRNRuWWhQ_6Ow4jU_odwAfIZ5VObOSjrMQjq1o1z7AVroA6F_co6-6jVrrJyx4-qwvhb9_PlIPzkl9OCKtTQfNXv7jwZVrEpiBnFFsakgUw41crK_TbPQdHktwMZfr0_yy8gCTtu0FOKJ3k2qIfgduPYrQMh5xHkWSy1LykIkTf3m3nS1Wf6_cPFtOgpjKqY_UBgcvG-0FY-Pl4fHho-i8Zci2XtA5e4Jg0bUDKjS6HIXC_GjRRILft5s-NQIczR0SmqwQcJl0mi3lzowbljA98UgHwnSMSEoXNOtdtH8zwqmK4ydTa2vmxw2qvE8cntgSYZRVTnJsSnJp2wlNjT0qwtoySB3dgIEi2J66JXmc5CXd3u-yMxbIx_Yi7z1ATyaeIBSCwjU_IakphCmHmI_Y8cwveWOQ33HLcaY9zzj5uJEz-CYfRmXadtgQOk8UBc9jcd9b09lAoAmKv9bwtw63uxfSlUdYULLb3A2Ocxz263c9y"
+def connect_to_dropbox(manual_token=None):
+    """
+    Conecta a Dropbox. 
+    Prioridad 1: Token manual ingresado en la app.
+    Prioridad 2: Secrets de Streamlit.
+    Prioridad 3: Archivo config.py.
+    """
+    token = None
+    
+    if manual_token:
+        token = manual_token
+    else:
+        try:
+            token = st.secrets["DROPBOX_ACCESS_TOKEN"]
+        except (FileNotFoundError, KeyError):
+            try:
+                from config import DROPBOX_ACCESS_TOKEN
+                token = DROPBOX_ACCESS_TOKEN
+            except ImportError:
+                pass
+    
+    if token:
         return dropbox.Dropbox(token)
+    else:
+        return None
 
 @st.cache_data(ttl=60)
 def get_client_data(_gsheet_client, spreadsheet_id):
@@ -68,6 +82,9 @@ def get_client_data(_gsheet_client, spreadsheet_id):
 
 def upload_to_dropbox(dbx_client, file_object, client_name):
     """Sube un archivo a Dropbox y devuelve el link para compartir."""
+    if dbx_client is None:
+        return "Error: Token de Dropbox no configurado"
+        
     try:
         mexico_tz = pytz.timezone("America/Mexico_City")
         timestamp = datetime.now(mexico_tz).strftime("%Y%m%d_%H%M%S")
@@ -115,10 +132,7 @@ def update_client_balance(_gsheet_client, spreadsheet_id, client_alias, new_usdt
         return False
 
 def get_next_folio_number(_gsheet_client, spreadsheet_id, sheet_tab_name):
-    """
-    Revisa el último registro en la hoja para determinar el siguiente número de folio.
-    Se reinicia cada día.
-    """
+    """Revisa el último registro para determinar el siguiente folio."""
     try:
         spreadsheet = _gsheet_client.open_by_key(spreadsheet_id)
         worksheet = spreadsheet.worksheet(sheet_tab_name)
@@ -145,22 +159,19 @@ def get_next_folio_number(_gsheet_client, spreadsheet_id, sheet_tab_name):
         return 1
         
 # --- NUEVA FUNCIÓN PARA LEER TASAS ---
-@st.cache_data(ttl=300) # Cache de 5 minutos para las tasas
+@st.cache_data(ttl=300)
 def get_initial_rates(_gsheet_client, spreadsheet_id):
     """Lee la hoja 'Tasas' y devuelve los valores iniciales."""
     try:
         spreadsheet = _gsheet_client.open_by_key(spreadsheet_id)
         worksheet = spreadsheet.worksheet("Tasas")
-        # Asumimos que los valores están en la segunda fila (A2 y B2)
         rates = worksheet.row_values(2)
         tasa_compra = float(rates[0])
         tasa_venta = float(rates[1])
         return tasa_compra, tasa_venta
     except gspread.exceptions.WorksheetNotFound:
-        st.warning("No se encontró la hoja 'Tasas'. Usando valores por defecto.")
         return 18.55, 19.44
-    except Exception as e:
-        st.warning(f"No se pudieron cargar las tasas. Usando valores por defecto. Error: {e}")
+    except Exception:
         return 18.55, 19.44
 
 # --- FUNCIONES DE LA INTERFAZ ---
@@ -237,11 +248,19 @@ def main():
         [data-testid="stFileUploader"] {padding-top: 28px;}
     </style>
     """, unsafe_allow_html=True)
+
+    # --- BARRA LATERAL PARA TOKEN ---
+    st.sidebar.header("Configuración")
+    manual_dbx_token = st.sidebar.text_input("Dropbox Access Token (Opcional)", type="password", help="Pega aquí tu token si hay errores de conexión")
+
     st.markdown("<h1 style='text-align: center;'>Calculadora y Registro de Operaciones 🏦</h1>", unsafe_allow_html=True)
     st.markdown("---")
+    
     gsheet_client, SPREADSHEET_ID, SHEET_TAB_NAME = connect_to_google_sheets()
-    dbx_client = connect_to_dropbox()
-
+    
+    # Pasamos el token manual a la función de conexión
+    dbx_client = connect_to_dropbox(manual_dbx_token)
+    
     # Cargar tasas iniciales
     initial_tasa_compra, initial_tasa_venta = get_initial_rates(gsheet_client, SPREADSHEET_ID)
 
@@ -254,26 +273,14 @@ def main():
     def add_ajuste_row():
         st.session_state.num_ajustes += 1
     def limpiar_calculos_callback():
-        for i in range(st.session_state.get('num_rows', 1)):
-            if f"input_compra_{i}" in st.session_state:
-                st.session_state[f"input_compra_{i}"] = 0.0
-            if f"input_vende_{i}" in st.session_state:
-                st.session_state[f"input_vende_{i}"] = 0.0
         st.session_state.num_rows = 1
         st.session_state.upload_key_iter += 1
     def limpiar_ajustes_callback():
-        for i in range(st.session_state.get('num_ajustes', 1)):
-            if f"pago_monto_{i}" in st.session_state:
-                st.session_state[f"pago_monto_{i}"] = 0.0
-            if f"recibo_monto_{i}" in st.session_state:
-                st.session_state[f"recibo_monto_{i}"] = 0.0
         st.session_state.num_ajustes = 1
         st.session_state.upload_key_iter += 1
     def limpiar_todo_callback():
         limpiar_calculos_callback()
         limpiar_ajustes_callback()
-        st.session_state.num_rows = 1
-        st.session_state.num_ajustes = 1
         if "cliente_selector" in st.session_state: st.session_state.cliente_selector = "-- Seleccione un Cliente --"
 
     st.header("1. Configuración de Operación")
@@ -297,15 +304,16 @@ def main():
             st.warning("No se pudieron cargar los clientes.")
     with col_compra:
         st.subheader("Configuración de Compra")
-        precio_compra_casa = st.number_input("Tasa de Compra", value=initial_tasa_compra, format="%.2f", key="precio_compra_input", step = 0.01)
+        precio_compra_casa = st.number_input("Tasa de Compra", value=initial_tasa_compra, format="%.4f", key="precio_compra_input")
         mode_vende = st.radio("Modo para 'Cliente Vende / Yo Compro'", ("Pesos -> USDT", "USDT -> Pesos"), horizontal=True, key="mode_vende")
     with col_venta:
         st.subheader("Configuración de Venta")
-        precio_venta_casa = st.number_input("Tasa de Venta", value=initial_tasa_venta, format="%.2f", key="precio_venta_input", step = 0.01)
+        precio_venta_casa = st.number_input("Tasa de Venta", value=initial_tasa_venta, format="%.4f", key="precio_venta_input")
         mode_compra = st.radio("Modo para 'Cliente Compra / Yo Vendo'", ("Pesos -> USDT", "USDT -> Pesos"), horizontal=True, key="mode_compra")
     st.markdown("---")
 
     st.header("2. Operaciones de Compra/Venta")
+    if 'num_rows' not in st.session_state: st.session_state.num_rows = 1
     col1, col2, _ = st.columns([1.3, 1.3, 5])
     with col1: st.button("➕ Añadir Cálculo", on_click=add_calculo_row, use_container_width=True)
     with col2: st.button("🔄 Limpiar Cálculos", use_container_width=True, on_click=limpiar_calculos_callback)
@@ -314,6 +322,7 @@ def main():
     st.markdown("---")
 
     st.header("3. Pagos y Recibos (Ajustes de Caja)")
+    if 'num_ajustes' not in st.session_state: st.session_state.num_ajustes = 1
     all_ajustes_data = [create_ajuste_row(i) for i in range(st.session_state.num_ajustes)]
     col_ajuste1, col_ajuste2, _ = st.columns([1.3, 1.3, 5])
     with col_ajuste1: st.button("➕ Añadir Ajuste", on_click=add_ajuste_row, use_container_width=True)
@@ -325,6 +334,8 @@ def main():
     recibir_usdt_sum = sum(d['usdt_recibir'] for d in all_rows_data)
     cobrar_pesos_sum = sum(d['pesos_cobrar'] for d in all_rows_data)
     entregar_usdt_sum = sum(d['usdt_entregar'] for d in all_rows_data)
+    
+    # Lógica corregida: Pagos SUMAN (aumentan deuda), Recibos RESTAN (disminuyen deuda)
     ajuste_neto_pesos = sum(d['pago_monto'] for d in all_ajustes_data if d['pago_moneda'] == 'MXN') - sum(d['recibo_monto'] for d in all_ajustes_data if d['recibo_moneda'] == 'MXN')
     ajuste_neto_usdt = sum(d['pago_monto'] for d in all_ajustes_data if d['pago_moneda'] == 'USDT') - sum(d['recibo_monto'] for d in all_ajustes_data if d['recibo_moneda'] == 'USDT')
     
@@ -341,7 +352,9 @@ def main():
         
     st.subheader("Balance Final de Cierre ⚖️")
     balance_final_usdt = (recibir_usdt_sum + balance_inicial_usdt + ajuste_neto_usdt) - entregar_usdt_sum
-    balance_final_pesos = 0 #(cobrar_pesos_sum + balance_inicial_pesos + ajuste_neto_pesos) - pagar_pesos_sum
+    # Calculamos pesos internamente para actualizar la hoja, aunque no se muestre
+    balance_final_pesos = (cobrar_pesos_sum + balance_inicial_pesos + ajuste_neto_pesos) - pagar_pesos_sum
+    
     if balance_final_usdt > 0:
         status_texto = "TE DEBEN PAGAR (Utilidad en USDT)"
         status_color = "#228B22"
@@ -377,18 +390,21 @@ def main():
                 else:
                     progress_bar = st.progress(0, text="Iniciando guardado...")
                     data_to_save_batch = []
+                    
                     mexico_tz = pytz.timezone("America/Mexico_City")
                     now_mexico = datetime.now(mexico_tz)
                     timestamp = now_mexico.strftime("%Y-%m-%d %H:%M:%S")
                     today_prefix = now_mexico.strftime("%y-%m-%d")
                     next_folio_num = get_next_folio_number(gsheet_client, SPREADSHEET_ID, SHEET_TAB_NAME)
+                    
                     total_ops = len(operations_to_process)
                     
                     for i, op in enumerate(operations_to_process):
                         current_folio = f"{today_prefix}-{next_folio_num + i:04d}"
                         progress_text = f"Procesando operación {current_folio}..."
-                        progress_bar.progress((i + 1) / (total_ops + 2), text=progress_text)
+                        progress_bar.progress((i) / (total_ops + 2), text=progress_text)
                         link = ""
+                        
                         if op['type'] == 'Compra':
                             uploader_key = f"uploader_vende_{op['index']}_{st.session_state.upload_key_iter}"
                             if uploader_key in st.session_state and st.session_state[uploader_key]:

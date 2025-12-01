@@ -273,14 +273,26 @@ def main():
     def add_ajuste_row():
         st.session_state.num_ajustes += 1
     def limpiar_calculos_callback():
+        for i in range(st.session_state.get('num_rows', 1)):
+            if f"input_compra_{i}" in st.session_state:
+                st.session_state[f"input_compra_{i}"] = 0.0
+            if f"input_vende_{i}" in st.session_state:
+                st.session_state[f"input_vende_{i}"] = 0.0
         st.session_state.num_rows = 1
         st.session_state.upload_key_iter += 1
     def limpiar_ajustes_callback():
+        for i in range(st.session_state.get('num_ajustes', 1)):
+            if f"pago_monto_{i}" in st.session_state:
+                st.session_state[f"pago_monto_{i}"] = 0.0
+            if f"recibo_monto_{i}" in st.session_state:
+                st.session_state[f"recibo_monto_{i}"] = 0.0
         st.session_state.num_ajustes = 1
         st.session_state.upload_key_iter += 1
     def limpiar_todo_callback():
         limpiar_calculos_callback()
         limpiar_ajustes_callback()
+        st.session_state.num_rows = 1
+        st.session_state.num_ajustes = 1
         if "cliente_selector" in st.session_state: st.session_state.cliente_selector = "-- Seleccione un Cliente --"
 
     st.header("1. Configuración de Operación")
